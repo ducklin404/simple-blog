@@ -12,7 +12,8 @@ import PostLists from "./PostList";
 import Login from "./Login";
 import NewPost from "./NewPost";
 import Stats from "./Stats";
-
+import ManagePosts from "./ManagePosts";
+import EditPost from "./EditPost";
 
 function Posts() {
   return (
@@ -22,9 +23,6 @@ function Posts() {
     </div>
   );
 }
-
-
-
 
 function Home() {
   return (
@@ -54,7 +52,6 @@ function NoMatch() {
 }
 
 function AppLayout() {
-
   const [user, setUser] = useState(null);
 
   // 2️⃣ little helper to clear it
@@ -62,37 +59,93 @@ function AppLayout() {
 
   return (
     <>
-    <Router>
-      <nav style={{margin: 10}}>
-        <Link to="/" style={{padding: 5}}> Home </Link>
-        <Link to="/posts" style={{padding: 5}}> Posts </Link>
-        <Link to="/about" style={{padding: 5}}> About </Link>
-        <span> | </span>
-        {user && <Link to="/stats" style={{padding: 5}}> Stats
-        </Link>}
-        {user && <Link to="/newpost" style={{padding: 5}}> New Post
-        </Link>}
-        {!user && <Link to="/login" style={{padding: 5}}> Login
-        </Link>}
-        {user && <span onClick={logOut} style={{padding: 5, cursor:
-        'pointer'}}> Logout </span>}
-      </nav>
-      <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path="/posts" element={<Posts/>}>
-        <Route index element={<PostLists/>}/>
-        <Route path=":slug" element={<Post/>}/>
-        </Route> <Route path="/about" element={<About/>}/>
-        <Route path="/login" element={<Login onLogin={setUser}/>}/>
-        <Route path="/stats" element={<ProtectedRoute user={user}><Stats/></ProtectedRoute>} />
-        <Route path="/newpost" element={<ProtectedRoute user={user}><NewPost/></ProtectedRoute>} />
-        <Route path="*" element={<NoMatch/>}/>
-      </Routes>
-    </Router>
-</>
-);
+      <Router>
+        <nav style={{ margin: 10 }}>
+          <Link to="/" style={{ padding: 5 }}>
+            {" "}
+            Home{" "}
+          </Link>
+          <Link to="/posts" style={{ padding: 5 }}>
+            {" "}
+            Posts{" "}
+          </Link>
+          <Link to="/about" style={{ padding: 5 }}>
+            {" "}
+            About{" "}
+          </Link>
+          <span> | </span>
+          {user && (
+            <Link to="/stats" style={{ padding: 5 }}>
+              {" "}
+              Stats
+            </Link>
+          )}
+          {user && (
+            <Link to="/manageposts" style={{ padding: 5 }}>
+              {" "}
+              Manage Posts
+            </Link>
+          )}
+          {!user && (
+            <Link to="/login" style={{ padding: 5 }}>
+              {" "}
+              Login
+            </Link>
+          )}
+          {user && (
+            <span onClick={logOut} style={{ padding: 5, cursor: "pointer" }}>
+              {" "}
+              Logout{" "}
+            </span>
+          )}
+        </nav>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/posts" element={<Posts />}>
+            <Route index element={<PostLists />} />
+            <Route path=":slug" element={<Post />} />
+          </Route>{" "}
+          <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login onLogin={setUser} />} />
+          <Route
+            path="/stats"
+            element={
+              <ProtectedRoute user={user}>
+                <Stats />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit/:slug"
+            element={
+              <ProtectedRoute user={user}>
+                <EditPost />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/newpost"
+            element={
+              <ProtectedRoute user={user}>
+                <NewPost />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manageposts"
+            element={
+              <ProtectedRoute user={user}>
+                <ManagePosts />
+              </ProtectedRoute>
+            }
+          />
+
+          
+          <Route path="*" element={<NoMatch />} />
+        </Routes>
+      </Router>
+    </>
+  );
 }
-
-
 
 export default AppLayout;
